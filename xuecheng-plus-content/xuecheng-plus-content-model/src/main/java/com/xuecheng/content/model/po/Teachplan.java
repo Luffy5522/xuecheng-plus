@@ -2,6 +2,8 @@ package com.xuecheng.content.model.po;
 
 import com.baomidou.mybatisplus.annotation.*;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
@@ -14,6 +16,8 @@ import java.time.LocalDateTime;
  * @author itcast
  */
 @Data
+@ToString
+@EqualsAndHashCode
 @TableName("teachplan")
 public class Teachplan implements Serializable {
 
