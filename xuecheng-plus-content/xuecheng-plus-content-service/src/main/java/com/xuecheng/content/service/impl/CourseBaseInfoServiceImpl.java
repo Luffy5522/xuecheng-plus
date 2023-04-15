@@ -5,6 +5,7 @@ import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.xuecheng.base.constant.CourseBaseEnum;
+import com.xuecheng.base.exception.XueChengPlusException;
 import com.xuecheng.base.model.PageParams;
 import com.xuecheng.base.model.PageResult;
 import com.xuecheng.content.mapper.CourseBaseMapper;
@@ -12,6 +13,7 @@ import com.xuecheng.content.mapper.CourseCategoryMapper;
 import com.xuecheng.content.mapper.CourseMarketMapper;
 import com.xuecheng.content.model.dto.AddCourseDto;
 import com.xuecheng.content.model.dto.CourseBaseInfoDto;
+import com.xuecheng.content.model.dto.EditCourseDto;
 import com.xuecheng.content.model.dto.QueryCourseParamsDto;
 import com.xuecheng.content.model.po.CourseBase;
 import com.xuecheng.content.model.po.CourseMarket;
@@ -74,32 +76,32 @@ public class CourseBaseInfoServiceImpl implements CourseBaseInfoService {
         // 1.对AddCourse进行判断是否合规
         if (StrUtil.isBlank(addCourseDto.getName())) {
             log.info("课程名字不能为空");
-            throw new RuntimeException("课程名字不能为空");
+            throw new XueChengPlusException("课程名字不能为空");
         }
         if (StrUtil.isBlank(addCourseDto.getUsers())) {
             log.info("使用人群不能为空");
             throw new RuntimeException("使用人群不能为空");
         }
-        if (StrUtil.isBlank(addCourseDto.getMt())){
+        if (StrUtil.isBlank(addCourseDto.getMt())) {
             log.info("课程分类不能为空");
             throw new RuntimeException("课程分类不能为空");
         }
 
-        if (StrUtil.isBlank(addCourseDto.getSt())){
+        if (StrUtil.isBlank(addCourseDto.getSt())) {
             log.info("课程分类不能为空");
             throw new RuntimeException("课程分类不能为空");
         }
-        if (StrUtil.isBlank(addCourseDto.getGrade())){
+        if (StrUtil.isBlank(addCourseDto.getGrade())) {
             log.info("课程等级不能为空");
             throw new RuntimeException("课程等级不能为空");
         }
 
-        if (StrUtil.isBlank(addCourseDto.getCharge())){
+        if (StrUtil.isBlank(addCourseDto.getCharge())) {
             log.info("收费情况不能为空");
             throw new RuntimeException("收费情况不能为空");
         }
         // 1.1 判断收费情况
-        if (addCourseDto.getCharge().equals(CourseBaseEnum.CHARGE_YES.getCode())){
+        if (addCourseDto.getCharge().equals(CourseBaseEnum.CHARGE_YES.getCode())) {
             // 若收费,则价格不能为空或0
             Float price = addCourseDto.getPrice();
             if (price <= 0) {
@@ -127,6 +129,40 @@ public class CourseBaseInfoServiceImpl implements CourseBaseInfoService {
         // 5. 创造CourseBaseInfoDto进行返回
         CourseBaseInfoDto courseBaseInfoDto = new CourseBaseInfoDto();
         BeanUtil.copyProperties(courseBase, courseBaseInfoDto);
+        return courseBaseInfoDto;
+    }
+
+    @Transactional
+    @Override
+    public CourseBaseInfoDto UpdateCourseBase(EditCourseDto editCourseDto) {
+        // 进行修改
+        // 注意进行修改的信息要符合规范
+        CourseBase courseBase = new CourseBase();
+        CourseMarket courseMarket = new CourseMarket();
+
+        // 进行属性赋值
+        BeanUtil.copyProperties(editCourseDto, courseBase);
+        BeanUtil.copyProperties(editCourseDto, courseMarket);
+
+        // 对数据库进行修改
+        courseBaseMapper.updateById(courseBase);
+        courseMarketMapper.updateById(courseMarket);
+
+        // 返回修改后的数据
+        CourseBaseInfoDto courseBaseInfoDto = new CourseBaseInfoDto();
+        BeanUtil.copyProperties(editCourseDto, courseBaseInfoDto);
+
+        return courseBaseInfoDto;
+
+    }
+
+    @Override
+    public CourseBaseInfoDto getCourseBase(Long courseId) {
+        CourseBase courseBase = courseBaseMapper.selectById(courseId);
+        CourseMarket courseMarket = courseMarketMapper.selectById(courseId);
+        CourseBaseInfoDto courseBaseInfoDto = new CourseBaseInfoDto();
+        BeanUtil.copyProperties(courseBase, courseBaseInfoDto);
+        BeanUtil.copyProperties(courseMarket, courseBaseInfoDto);
         return courseBaseInfoDto;
     }
 
