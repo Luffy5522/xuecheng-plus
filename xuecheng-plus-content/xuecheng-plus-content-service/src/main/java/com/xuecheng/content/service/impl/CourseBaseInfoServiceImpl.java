@@ -9,7 +9,6 @@ import com.xuecheng.base.exception.XueChengPlusException;
 import com.xuecheng.base.model.PageParams;
 import com.xuecheng.base.model.PageResult;
 import com.xuecheng.content.mapper.CourseBaseMapper;
-import com.xuecheng.content.mapper.CourseCategoryMapper;
 import com.xuecheng.content.mapper.CourseMarketMapper;
 import com.xuecheng.content.model.dto.AddCourseDto;
 import com.xuecheng.content.model.dto.CourseBaseInfoDto;
@@ -39,9 +38,6 @@ public class CourseBaseInfoServiceImpl implements CourseBaseInfoService {
     @Resource
     CourseMarketMapper courseMarketMapper;
 
-    @Resource
-    CourseCategoryMapper courseCategoryMapper;
-
     @Override
     public PageResult<CourseBase> queryCourseBaseList(PageParams pageParams, QueryCourseParamsDto courseParamsDto) {
 
@@ -64,7 +60,7 @@ public class CourseBaseInfoServiceImpl implements CourseBaseInfoService {
         long total = pageResult.getTotal();
 
         //List<T> items, long counts, long page, long pageSize
-        return new PageResult<CourseBase>(items, total, pageParams.getPageNo(), pageParams.getPageSize());
+        return new PageResult<>(items, total, pageParams.getPageNo(), pageParams.getPageSize());
 
 
     }
@@ -166,10 +162,10 @@ public class CourseBaseInfoServiceImpl implements CourseBaseInfoService {
         return courseBaseInfoDto;
     }
 
-    private Boolean createCourseMarket(AddCourseDto addCourseDto) {
+    private void createCourseMarket(AddCourseDto addCourseDto) {
         CourseMarket courseMarket = new CourseMarket();
         BeanUtil.copyProperties(addCourseDto, courseMarket);
-        return courseMarketMapper.insert(courseMarket) == 1;
+        courseMarketMapper.insert(courseMarket);
     }
 
 
