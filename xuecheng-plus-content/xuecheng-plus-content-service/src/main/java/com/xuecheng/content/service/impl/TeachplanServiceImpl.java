@@ -47,7 +47,6 @@ public class TeachplanServiceImpl implements TeachplanService {
             teachplanNew.setOrderby(count + 1);
             BeanUtils.copyProperties(teachplanDto, teachplanNew);
             teachplanMapper.insert(teachplanNew);
-
         }
 
     }
@@ -64,8 +63,18 @@ public class TeachplanServiceImpl implements TeachplanService {
         LambdaQueryWrapper<Teachplan> queryWrapper = new LambdaQueryWrapper<>();
         queryWrapper.eq(Teachplan::getCourseId, courseId);
         queryWrapper.eq(Teachplan::getParentid, parentId);
-        Integer count = teachplanMapper.selectCount(queryWrapper);
-        return count;
+        return teachplanMapper.selectCount(queryWrapper);
     }
+
+
+    @Override
+    public void deleteTeachplan(Long id) {
+        // 根据情况删除
+
+        // 有小章节时
+
+        // 注意删除后要重新排序
+    }
+
 
 }

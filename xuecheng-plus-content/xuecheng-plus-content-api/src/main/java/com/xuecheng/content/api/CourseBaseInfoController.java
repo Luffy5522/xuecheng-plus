@@ -49,8 +49,15 @@ public class CourseBaseInfoController {
 
     @ApiOperation("查询课程接口")
     @GetMapping("/course/{courseId}")
-    public CourseBaseInfoDto test(@PathVariable Long courseId) {
+    public CourseBaseInfoDto getCourseBase(@PathVariable Long courseId) {
         return courseBaseInfoService.getCourseBase(courseId);
+    }
+
+
+    @ApiOperation("删除课程接口")
+    @DeleteMapping("/course/{courseId}")
+    public void deleteCourseBase(@PathVariable Long courseId){
+        courseBaseInfoService.deleteCourseBase(courseId);
     }
 
 }

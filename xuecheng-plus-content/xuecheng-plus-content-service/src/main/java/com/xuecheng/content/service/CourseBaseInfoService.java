@@ -7,6 +7,7 @@ import com.xuecheng.content.model.dto.CourseBaseInfoDto;
 import com.xuecheng.content.model.dto.EditCourseDto;
 import com.xuecheng.content.model.dto.QueryCourseParamsDto;
 import com.xuecheng.content.model.po.CourseBase;
+import org.springframework.web.bind.annotation.PathVariable;
 
 /**
  * @author Mr.M
@@ -53,5 +54,13 @@ public interface CourseBaseInfoService {
      */
     CourseBaseInfoDto getCourseBase(Long courseId);
 
+
+    /**
+     * @param courseId: 课程id
+     * @author Luffy5522
+     * @description 根据课程id删除课程
+     * @date 2023/4/15 20:52
+     */
+    void deleteCourseBase(@PathVariable Long courseId);
 
 }

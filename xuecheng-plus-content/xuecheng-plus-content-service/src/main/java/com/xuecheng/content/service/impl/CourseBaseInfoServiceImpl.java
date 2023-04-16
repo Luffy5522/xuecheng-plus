@@ -162,6 +162,22 @@ public class CourseBaseInfoServiceImpl implements CourseBaseInfoService {
         return courseBaseInfoDto;
     }
 
+    @Transactional
+    @Override
+    public void deleteCourseBase(Long courseId) {
+        CourseBase courseBase = courseBaseMapper.selectById(courseId);
+        if (courseBase == null) {
+            throw new XueChengPlusException("课程id不存在");
+        }
+        if (courseBase.getAuditStatus().equals(CourseBaseEnum.AUDIT_COMMIT.getCode())) {
+            throw new XueChengPlusException("正在审核中,不可删除");
+        }
+
+        courseBaseMapper.deleteById(courseId);
+        courseMarketMapper.deleteById(courseId);
+
+    }
+
     private void createCourseMarket(AddCourseDto addCourseDto) {
         CourseMarket courseMarket = new CourseMarket();
         BeanUtil.copyProperties(addCourseDto, courseMarket);
